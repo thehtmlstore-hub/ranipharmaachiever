@@ -1,0 +1,14 @@
+{
+  "name": "rani-pharma-firebase-portal",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  },
+  "devDependencies": {
+    "vercel": "^41.6.0"
+  }
+}
