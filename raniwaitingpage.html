@@ -649,7 +649,7 @@ main:focus { outline: none; }
   const params = new URLSearchParams(location.search);
   let TEST = null;
   let ATTEMPT = null;
-  let unlockOffsetMinutes = 5;
+  let unlockOffsetMinutes = 1;
   let clockOffset = 0; // server time − this device's time
 
   const now = () => Date.now() + clockOffset;

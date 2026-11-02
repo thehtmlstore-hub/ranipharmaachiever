@@ -3,12 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vercel dev"
+    "dev": "npx -y vercel@65.9.0 dev",
+    "check": "node --check firebase-client.js && node --check 'api/[[...path]].js' && node --check scripts/import-students.mjs && node --check scripts/prepare-firebase-auth-import.mjs",
+    "import:students": "node scripts/import-students.mjs",
+    "prepare:auth-import": "node scripts/prepare-firebase-auth-import.mjs"
   },
   "dependencies": {
-    "firebase-admin": "^13.4.0"
-  },
-  "devDependencies": {
-    "vercel": "^41.6.0"
+    "firebase-admin": "^14.5.0"
   }
 }

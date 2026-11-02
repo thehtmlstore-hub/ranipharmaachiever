@@ -11,7 +11,7 @@ This package keeps the supplied HTML/CSS and page layout unchanged while connect
 - `api/[[...path]].js`: server-side Firebase Admin API for accounts, tests, question bank, autosaving, submission, scoring and results.
 - `firestore.rules`: blocks direct browser access to Firestore; the trusted API uses the Admin SDK.
 - `firestore.indexes.json` and `firebase.json`: required composite indexes and Firebase CLI configuration.
-- `scripts/import-students-from-sql.mjs`: one-time migration for the 104 student accounts in `private-import/students_db.sql` into Firebase Authentication and Firestore. The SQL file contains plaintext passwords; keep it private and never commit or deploy it.
+- `scripts/import-students.mjs`: one-time CSV/JSON migration into Firebase Authentication and matching Firestore student profiles. The source contains plaintext initial passwords; keep it private and never commit or deploy it.
 - `vercel.json`, `package.json`: routing and server dependencies.
 
 ## 1. Back up before deployment
@@ -90,18 +90,19 @@ The API uses these collections:
 
 Do not manually type passwords into Firestore. The server verifies the Firebase ID token and the `users/{uid}` role for every protected API request. Scoring is performed server-side; the browser cannot set the final score.
 
-## 8. Import the supplied student accounts (104 records)
+## 8. Import student accounts
 
-If you have a private `students_db.sql` containing student rows with `user_id`, `password`, and `full_name`, Firebase Authentication does not use the SQL table directly, so run the migration script locally to create Firebase Auth users and matching `users/{UID}` Firestore profiles. **Passwords are never written to Firestore.**
+Prepare a private CSV or JSON file containing register number, student name, and initial password. Firebase Authentication does not use that file directly, so run the migration script locally to create Firebase Auth users and matching `users/{UID}` Firestore profiles. **Passwords are never written to Firestore.**
 
 1. Confirm Email/Password sign-in is enabled and the service-account JSON belongs to project `ranipharma`.
 2. Open Terminal in this project folder. Set `FIREBASE_SERVICE_ACCOUNT_JSON` to the complete service-account JSON as a shell environment value; do not paste it into any source file.
 3. Install dependencies with `npm install`.
-4. Run `node scripts/import-students-from-sql.mjs`.
-5. Check the summary and the local `student-import-report.json`. The script is safe to rerun: it does not reset passwords for accounts that already exist, and it repairs missing/mismatched Firestore profiles. Existing Firebase accounts keep their current password; the SQL password only initializes newly created accounts.
-6. Confirm the report shows 104 total rows and zero failures. Resolve any failures before student login testing.
+4. Use a CSV header such as `regNo,name,password`, or a JSON array with those fields.
+5. Run `node scripts/import-students.mjs /absolute/path/to/student-records.csv` (JSON is also accepted).
+6. Check the printed summary. The script is safe to rerun: it does not reset passwords for accounts that already exist, and it repairs missing/mismatched Firestore profiles. Existing Firebase accounts keep their current password; the source password only initializes newly created accounts.
+7. Confirm the summary has zero failures. Resolve any failures before student login testing.
 
-The SQL export is not included in this ZIP. If you use the importer, place your private SQL file in `private-import/students_db.sql` locally; `.vercelignore` and `.gitignore` exclude that folder. Keep the SQL file in a private local working copy only. Since it contains plaintext credentials, delete extra copies when the migration and verification are complete, and distribute passwords securely.
+The student records file is not included in this folder. Keep it outside the project where possible. The included ignore files also exclude common `student-records*.csv/json` names. Since it contains plaintext initial credentials, delete extra copies when migration and verification are complete, and distribute passwords securely.
 
 ## 9. Deploy to Vercel Preview
 
@@ -155,11 +156,11 @@ Run these commands from the extracted `rani-firebase-integration` folder. Do not
 
    ```bash
    export FIREBASE_SERVICE_ACCOUNT_JSON="$(cat service-account-ranipharma.json)"
-   node scripts/import-students-from-sql.mjs
+   node scripts/import-students.mjs /absolute/path/to/student-records.csv
    unset FIREBASE_SERVICE_ACCOUNT_JSON
    ```
 
-   Confirm `student-import-report.json` says `totalRows: 104` and `failed: 0`. If it reports failures, stop and resolve them before deploying or giving credentials to students. The importer only initializes passwords for newly created Firebase Auth accounts; it does not reset existing accounts' passwords.
+   Confirm the printed report has an empty `failed` array. If it reports failures, stop and resolve them before deploying or giving credentials to students. The importer only initializes passwords for newly created Firebase Auth accounts; it does not reset existing accounts' passwords.
 
 4. Deploy Firestore rules and indexes (requires Firebase CLI access to project `ranipharma`):
 
@@ -187,4 +188,4 @@ Run these commands from the extracted `rani-firebase-integration` folder. Do not
 - The SQL file is a one-time import source, not a live SQL Server connection. After migration, Firebase Authentication stores the login password securely and Firestore stores profile/test/result data.
 - The API now requires a user profile to have `active: true` before protected routes work. The initial faculty profile and every imported student profile must include this field.
 - A successful JavaScript syntax check is not proof of a successful database connection. Confirm the import report, deployed `/api/auth/me` response while signed in, Firestore documents, and the full end-to-end checklist before real use.
-- Never publish `private-import/students_db.sql`, `student-import-report.json`, or a service-account JSON file. The SQL file contains plaintext initial passwords. Distribute them privately and require a password-change process before using sensitive accounts.
+- Never publish a student records file, import report containing identifiers, or a service-account JSON file. The source file contains plaintext initial passwords. Distribute them privately and require a password-change process before using sensitive accounts.

@@ -1,0 +1,11 @@
+node_modules/
+.vercel/
+.env
+.env.*
+!.env.example
+service-account*.json
+*-service-account.json
+student-records*.csv
+student-records*.json
+student-import-report*.json
+firebase-debug.log

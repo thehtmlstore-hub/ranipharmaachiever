@@ -1728,7 +1728,7 @@ async function handleExportCSV(testId){
   catch (err) { showToast(err.message); return; }
   if (results.length === 0){ showToast('No submissions yet for this test.'); return; }
 
-  const sorted = [...results].sort((a,b) => b.score - a.score);
+  const sorted = [...results].sort(compareStudentResults);
   const rows = [["Rank", "Register Number", "Student Name", "Score", "Out Of", "Accuracy %", "Correct", "Wrong", "Unattempted", "Submitted At"]];
   sorted.forEach((r, i) => rows.push([i+1, r.regNo, r.studentName, r.score, r.totalPossible, Math.round(r.accuracy), r.correctCount, r.wrongCount, r.unattemptedCount, new Date(r.submittedAt).toLocaleString()]));
   downloadCSV(sanitizeFilename(test.name) + '-results.csv', rows);
@@ -2298,9 +2298,17 @@ function renderTopicBars(results, test){
   }).join('');
 }
 
+function compareStudentResults(a, b){
+  return (Number(b.score) || 0) - (Number(a.score) || 0)
+    || (Number(b.accuracy) || 0) - (Number(a.accuracy) || 0)
+    || (Number(a.timeTakenSeconds) || Number.MAX_SAFE_INTEGER) - (Number(b.timeTakenSeconds) || Number.MAX_SAFE_INTEGER)
+    || new Date(a.submittedAt || 0) - new Date(b.submittedAt || 0)
+    || String(a.regNo || '').localeCompare(String(b.regNo || ''));
+}
+
 function renderRankings(results, test){
   if (results.length === 0) return `<div class="inline-empty">No submissions yet.</div>`;
-  const sorted = [...results].sort((a, b) => b.score - a.score);
+  const sorted = [...results].sort(compareStudentResults);
   return sorted.map((r, i) => `
     <div class="ranking-item" data-idx="${i}" role="row">
       <button class="ranking-trigger" aria-expanded="false" aria-controls="drilldown-${i}">

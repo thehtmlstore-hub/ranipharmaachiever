@@ -1,4 +1,15 @@
 {
+  "auth": {
+    "authorizedDomains": [
+      "localhost",
+      "ranipharma.firebaseapp.com",
+      "ranipharmaachievers.com",
+      "www.ranipharmaachievers.com"
+    ],
+    "providers": {
+      "emailPassword": true
+    }
+  },
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"

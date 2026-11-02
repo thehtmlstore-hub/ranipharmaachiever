@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/ranipharmalogin2.html"
+      "destination": "/index.html"
     },
     {
       "source": "/faculty",

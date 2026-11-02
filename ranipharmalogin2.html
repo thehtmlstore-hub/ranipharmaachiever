@@ -180,8 +180,10 @@ body {
 
 /* Sign-in pill in the navbar — 3D green button */
 .nav-signin {
-  display: inline-block;
-  padding: 9px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
   background: linear-gradient(180deg, #00C763 0%, #00A651 100%);
   color: #fff;
   border-radius: 11px;
@@ -194,6 +196,15 @@ body {
               inset 0 1px 0 rgba(255, 255, 255, 0.30),
               0 3px 0 var(--green-dark);
   transition: transform 160ms var(--ease), box-shadow 160ms var(--ease), filter 160ms ease;
+}
+.nav-signin svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform 160ms ease;
+}
+.nav-signin:hover svg {
+  transform: scale(1.15);
 }
 .nav-signin:hover { filter: brightness(1.06); transform: translateY(-1px); }
 .nav-signin:active { transform: translateY(2px); box-shadow: 0 2px 8px -2px rgba(0,166,81,.5), inset 0 1px 0 rgba(255,255,255,.25), 0 1px 0 var(--green-dark); }
@@ -1231,7 +1242,13 @@ select.input option { color: var(--ink); }
         <a href="#/faqs" data-view="faqs">FAQs</a>
         <a href="#/contact" data-view="contact">Contact</a>
       </nav>
-      <a class="nav-signin" href="#/signin">Sign In</a>
+      <a class="nav-signin" href="#/signin" aria-label="Sign In to Portal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>Sign In</span>
+      </a>
       <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links" data-action="toggle-menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="3" y1="6" x2="21" y2="6"/>

@@ -481,6 +481,111 @@ h1, h2, h3, h4,
 
 .nav__actions { display: flex; align-items: center; gap: var(--space-3); }
 
+/* ---------- 6b. Interactive Header Login Button (Exact same style & palette as Enquire now) ---------- */
+.nav__login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--white);
+  background: linear-gradient(135deg, rgba(0, 166, 81, 0.82), rgba(2, 122, 60, 0.68));
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--radius-md);
+  -webkit-backdrop-filter: blur(12px) saturate(170%);
+  backdrop-filter: blur(12px) saturate(170%);
+  box-shadow: 0 8px 24px rgba(0, 166, 81, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+/* Glass sheen sweep across on hover — identical to .btn::after */
+.nav__login::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+
+.nav__login:hover {
+  color: var(--white);
+  background: linear-gradient(135deg, rgba(0, 166, 81, 0.92), rgba(2, 122, 60, 0.80));
+  box-shadow: 0 10px 28px rgba(0, 166, 81, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  transform: translateY(-2px);
+}
+
+.nav__login:hover::after {
+  left: 135%;
+}
+
+.nav__login:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 4px 14px rgba(0, 166, 81, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.nav__login:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+/* Crisp white SVG login icon */
+.nav__login-svg {
+  width: 17px;
+  height: 17px;
+  stroke: var(--white);
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav__login:hover .nav__login-svg {
+  transform: scale(1.12);
+}
+
+/* Mobile drawer sign-in item */
+.mobile-menu__login {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, rgba(0, 166, 81, 0.88), rgba(2, 122, 60, 0.78));
+  color: var(--white) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-weight: 700 !important;
+  font-size: var(--fs-sm);
+  box-shadow: 0 8px 24px rgba(0, 166, 81, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.mobile-menu__login:hover {
+  background: linear-gradient(135deg, rgba(0, 166, 81, 0.96), rgba(2, 122, 60, 0.88));
+  color: var(--white) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0, 166, 81, 0.45);
+}
+.mobile-menu__login svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--white);
+  flex-shrink: 0;
+}
+
 .nav__toggle {
   display: none;
   width: 40px;
@@ -2623,8 +2728,31 @@ html:has(.lightbox[open]) { overflow: hidden; }
 }
 
 @media (max-width: 959px) {
-  .nav__links, .nav__actions .btn--primary { display: none; }
+  .nav__links, .nav__actions .btn--primary:not(.nav__login) { display: none; }
   .nav__toggle { display: flex; }
+  .nav__actions { gap: var(--space-2); }
+  .nav__actions .nav__login {
+    display: inline-flex !important;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    justify-content: center;
+  }
+  .nav__login span { display: none; }
+  .nav__login .nav__login-svg { width: 19px; height: 19px; margin: 0; }
+}
+
+/* Small laptops: compact mode so all eight links fit comfortably */
+@media (min-width: 960px) and (max-width: 1080px) {
+  .nav__login span { display: none; }
+  .nav__actions .nav__login {
+    padding: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-md);
+    justify-content: center;
+  }
   .nav__actions { gap: var(--space-2); }
 }
 
