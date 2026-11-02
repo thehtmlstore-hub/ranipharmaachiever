@@ -56,8 +56,21 @@ async function login(form, role) {
     const credential = await signInWithEmailAndPassword(auth, accountEmail(id, role), password);
     const token = await credential.user.getIdToken(true);
     const response = await fetch('/api/auth/me', { headers: { Authorization: 'Bearer ' + token } });
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      await signOut(auth);
+      throw new Error('The portal backend is not connected to this website deployment. Contact the administrator.');
+    }
     const data = await response.json().catch(() => ({}));
-    if (!response.ok || !data.user || data.user.role !== role) {
+    if (response.status === 404 || response.status >= 500) {
+      await signOut(auth);
+      throw new Error(data.message || 'The portal backend is currently unavailable. Contact the administrator.');
+    }
+    if (!response.ok) {
+      await signOut(auth);
+      throw new Error(data.message || 'This account could not be verified. Contact the administrator.');
+    }
+    if (!data.user || data.user.role !== role) {
       await signOut(auth);
       throw new Error('This account is not authorized for the ' + role + ' portal. Contact the administrator.');
     }

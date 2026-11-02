@@ -646,7 +646,8 @@ async function startTest(req, res, testId) {
   const identity = await requireUser(req, 'student');
   const test = await loadTest(testId);
   const now = Date.now();
-  if (now < test.slotStart) fail(409, 'not_open', 'This test has not started yet.');
+  const unlockAt = test.slotStart - START_UNLOCK_MINUTES * 60 * 1000;
+  if (now < unlockAt) fail(409, 'not_open', `This test opens ${START_UNLOCK_MINUTES} minute before its scheduled start.`);
   if (now >= test.slotEnd) fail(409, 'closed', 'This test slot has ended.');
 
   const ref = db.collection('attempts').doc(attemptId(identity.decoded.uid, testId));
