@@ -2,6 +2,9 @@
   "name": "rani-pharma-firebase-portal",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "npx -y vercel@65.9.0 dev",
     "check": "node --check firebase-client.js && node --check lib/portal-api.js && node --check api/index.js && node --check scripts/import-students.mjs && node --check scripts/prepare-firebase-auth-import.mjs && node --check scripts/verify-portal-flow.mjs",
@@ -10,6 +13,9 @@
     "prepare:auth-import": "node scripts/prepare-firebase-auth-import.mjs"
   },
   "dependencies": {
-    "firebase-admin": "^14.5.0"
+    "firebase-admin": "14.5.0"
+  },
+  "overrides": {
+    "jwks-rsa": "3.2.0"
   }
 }
