@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "npx -y vercel@65.9.0 dev",
-    "check": "node --check firebase-client.js && node --check 'api/[[...path]].js' && node --check scripts/import-students.mjs && node --check scripts/prepare-firebase-auth-import.mjs && node --check scripts/verify-portal-flow.mjs",
+    "check": "node --check firebase-client.js && node --check 'api/[[...path]].js' && node --check 'api/[...path].js' && node --check scripts/import-students.mjs && node --check scripts/prepare-firebase-auth-import.mjs && node --check scripts/verify-portal-flow.mjs",
     "verify:flow": "node scripts/verify-portal-flow.mjs",
     "import:students": "node scripts/import-students.mjs",
     "prepare:auth-import": "node scripts/prepare-firebase-auth-import.mjs"
