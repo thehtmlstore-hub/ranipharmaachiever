@@ -9,7 +9,7 @@ process.env.FIRESTORE_EMULATOR_HOST = '127.0.0.1:8080';
 const [{ getAuth }, { FieldValue, Timestamp, getFirestore }, { default: handler }] = await Promise.all([
   import('firebase-admin/auth'),
   import('firebase-admin/firestore'),
-  import('../api/[[...path]].js')
+  import('../lib/portal-api.js')
 ]);
 
 const auth = getAuth();
